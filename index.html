@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Report: Exploring Gaya Ji</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Sacred Earth -->
+    <!-- Application Structure Plan: A non-linear, thematic dashboard SPA. The structure prioritizes user-led exploration over the report's linear format. It begins with a high-level overview ('At a Glance') with key stats and charts. It then introduces a new 'Historical Evolution' section for chronological context. It then dives into the core themes: the 'Spiritual Nexus' (using tabs to separate Hinduism and Buddhism for clarity, now including more sites), 'Cultural Tapestry' (using visual grids for festivals and food, plus new cultural insights and travel tips), and 'Development & Future' (using a mix of charts and interactive info cards, with enhanced infrastructure details). This segmented approach makes the dense information digestible and allows users to focus on topics of interest. The sticky navigation ensures easy movement between these thematic sections, enhancing usability. -->
+    <!-- Visualization & Content Choices: 
+        - Population Trend: Report Info -> Population estimates 2001, 2011, 2023, 2024, 2025. Goal -> Show Change. Viz -> Line Chart. Interaction -> Hover for details. Justification -> Clearly visualizes urban growth. Library -> Chart.js.
+        - Religious Demographics: Report Info -> Hindu/Muslim/Christian/Jain/Sikh/Buddhist percentages. Goal -> Show Proportion. Viz -> Doughnut Chart. Interaction -> Hover to see % values. Justification -> Instant understanding of demographic composition. Library -> Chart.js.
+        - Economic Drivers: Report Info -> Agriculture, household industry, religious tourism, mica mining. Goal -> Show Proportion. Viz -> Doughnut Chart. Interaction -> Hover for details. Justification -> Simplifies complex economic data. Library -> Chart.js.
+        - Spiritual Sites: Report Info -> Lists of Hindu/Buddhist/Jain sites (enhanced with more details). Goal -> Organize. Viz -> Tabbed card layout. Interaction -> Click tabs to switch context. Justification -> Prevents clutter, allows focused exploration of the dual-faith identity, integrates new sites. Library -> HTML/CSS/JS.
+        - Key Stats: Report Info -> Area, elevation, literacy, 2011 population, sex ratio. Goal -> Inform. Viz -> Stylized info cards. Interaction -> None. Justification -> Highlights essential data points for quick consumption. Library -> HTML/Tailwind.
+        - Historical Evolution: Report Info -> Ancient roots, empires, significant events (Congress session), UNESCO/HRIDAY, Gayasura mythology. Goal -> Inform, provide context. Viz -> Textual blocks with clear headings. Interaction -> None. Justification -> Presents chronological narrative effectively. Library -> HTML/Tailwind.
+        - Cultural Practices: Report Info -> Festivals, unique beliefs (Phalgu River), culinary heritage, multi-faith harmony, travel essentials, local transport. Goal -> Inform, highlight cultural diversity. Viz -> Grid of text cards, descriptive paragraphs. Interaction -> None. Justification -> Showcases cultural richness effectively. Library -> HTML/Tailwind.
+        - CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FFFAF0; /* Floral White - a warm neutral */
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #D97706; /* Amber 600 */
+            border-bottom-color: #D97706;
+        }
+        .tab-button {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .tab-button.active {
+            background-color: #D97706; /* Amber 600 */
+            color: white;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 384px;
+            }
+        }
+    </style>
+</head>
+<body class="text-slate-800">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-amber-700">Gaya Ji</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#home" class="nav-link px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Home</a>
+                        <a href="#glance" class="nav-link px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">At a Glance</a>
+                        <a href="#history" class="nav-link px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">History</a>
+                        <a href="#spiritual" class="nav-link px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Spiritual Nexus</a>
+                        <a href="#culture" class="nav-link px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Culture</a>
+                        <a href="#development" class="nav-link px-3 py-2 rounded-md text-sm font-medium border-b-2 border-transparent">Development</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="py-20 bg-amber-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold text-slate-900 leading-tight">
+                    Exploring <span class="text-amber-600">Gaya Ji</span>
+                </h1>
+                <p class="mt-4 text-lg md:text-xl text-slate-600 max-w-3xl mx-auto">Gaya, officially renamed 'Gaya Ji' on May 18, 2025, is a city in Bihar, India, of profound spiritual, historical, and cultural significance. Join this interactive journey through its ancient traditions and evolving modernity.</p>
+            </div>
+        </section>
+
+        <section id="glance" class="py-16 sm:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Gaya Ji at a Glance</h2>
+                    <p class="mt-4 text-lg text-slate-600">This section provides a high-level overview of Gaya Ji's core statistics, geographical context, and demographic trends. Located in south-central Bihar along the Phalgu River, near the junction of the Gangetic Plain and the Chota Nagpur plateau, you can quickly grasp the city's scale, its unique topography (surrounded by rocky hills and with an elevation of 111 meters), and its urban growth, setting the foundational context for its deeper significance. The city's area is 308 square kilometers, ranking 21st in India and 3rd in Bihar by area.</p>
+                </div>
+
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <p class="text-sm font-medium text-amber-600">Population (2024 Est.)</p>
+                        <p class="mt-2 text-3xl font-bold">664,000</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <p class="text-sm font-medium text-amber-600">Population (2011 Census)</p>
+                        <p class="mt-2 text-3xl font-bold">470,839</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <p class="text-sm font-medium text-amber-600">Literacy Rate (Age 7+, 2011)</p>
+                        <p class="mt-2 text-3xl font-bold">85.74%</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <p class="text-sm font-medium text-amber-600">Sex Ratio (2011)</p>
+                        <p class="mt-2 text-3xl font-bold">986 ♀/1000 ♂</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <p class="text-sm font-medium text-amber-600">Population Density (2011)</p>
+                        <p class="mt-2 text-3xl font-bold">9,490/km²</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+                        <p class="text-sm font-medium text-amber-600">Population below 5 (2011)</p>
+                        <p class="mt-2 text-3xl font-bold">59,669</p>
+                    </div>
+                </div>
+
+                <div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-semibold text-center mb-4">Population Growth</h3>
+                        <div class="chart-container">
+                            <canvas id="populationChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-semibold text-center mb-4">Religious Demographics (2011)</h3>
+                        <div class="chart-container">
+                            <canvas id="religionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                 <div class="mt-16 text-center bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="font-bold text-amber-700 text-xl">Official & Spoken Languages</h3>
+                    <p class="mt-2 text-slate-600">The official languages of Gaya Ji are Hindi and English. Locally, **Magahi** is widely spoken, being the predominant mother tongue for about 41.4% of the district's population. Urdu and other Hindi dialects are also present, reflecting the linguistic diversity of the region.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="history" class="py-16 sm:py-24 bg-amber-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Historical Evolution</h2>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Dive into Gaya Ji's rich past, a journey through ancient empires, significant religious developments, and key moments in modern Indian history. This section outlines the chronological evolution of the city, from its mythical origins to its recognition as a heritage site, highlighting its enduring legacy through various dynasties and events.</p>
+                </div>
+
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-amber-700 text-xl">Ancient Roots & Mythology</h3>
+                        <p class="mt-2 text-slate-600">Gaya Ji's history stretches back to antiquity, mentioned as "Gayapuri" in the epic *Ramayana* and *Mahabharata*. Its origins trace back to the Rigvedic Kikata kingdom. In Hindu epics, Lord Rama is said to have performed the *piṇḍadāna* (ancestral rites) here for his father, Dasharatha. Its name originates from the demon Gayasura, whose pious body, as per the Vayu Purana, transformed into the very rocky hills surrounding the city (Mangla-Gauri, Shringa-Sthan, Ram-Shila, and Brahmayoni) after Lord Vishnu subdued him. This mythological origin deeply embeds the city's spiritual significance into its geographical identity.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-amber-700 text-xl">Mauryan, Gupta & Pala Eras</h3>
+                        <p class="mt-2 text-slate-600">The city flourished significantly under the **Mauryan Empire** (321–187 BCE), with Emperor Ashoka building the first temple at Bodh Gaya in the 3rd century BCE. During the **Mauryan** and **Gupta** periods (4th–5th centuries CE), Magadha (including Gaya) was a cultural center; King Bimbisara (6th c. BCE) patronized Buddhism and Jainism. By the early medieval era, Gaya Ji fell under **Pala** rule (8th–12th c.), during which the core structures of the Mahabodhi Temple were constructed, further solidifying its prominence as a dual Hindu-Buddhist pilgrimage site.</p>
+                    </div>
+                     <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-amber-700 text-xl">Medieval to Modern Rule & Independence</h3>
+                        <p class="mt-2 text-slate-600">In 1194, the Turkic general Muhammad Bakhtiyar Khilji sacked the region; Gaya Ji later came under the Delhi Sultanate and the **Mughal Empire**. The present-day main Vishnu shrine (Vishnupad Temple) was rebuilt by Ahilyabai Holkar in 1787. Following the 1764 Battle of Buxar, Gaya Ji fell to the British East India Company, becoming part of Bengal Presidency and then Bihar. The modern **Gaya district** was created on October 3, 1865. In the 20th century, Gaya Ji was active in the independence movement, hosting the **37th Congress session** (December 26-31, 1922) under C. R. Das, attended by Mahatma Gandhi, Jawaharlal Nehru, and Sardar Vallabhbhai Patel. It is also the birthplace of prominent leaders like Anugrah Narayan Sinha and Satyendra Narayan Sinha.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-amber-700 text-xl">Heritage Recognition & Conservation</h3>
+                        <p class="mt-2 text-slate-600">Today, Bodh Gaya (part of the larger Gaya Ji region) is recognized as a **UNESCO World Heritage Site** since June 26, 2002, for its unparalleled Buddhist significance (Mahabodhi Temple Complex), which is the earliest brick-built Buddhist shrine still standing. After 1947, Gaya Ji grew as a pilgrimage and regional center. It was designated a Heritage City under India’s **HRIDAY (Heritage City Development and Augmentation Yojana)** scheme for urban development, affirming its cultural and historical importance and focusing on urban planning and conservation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="spiritual" class="py-16 sm:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">The Spiritual Nexus</h2>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Gaya Ji's identity is uniquely defined by its status as a paramount pilgrimage site for Hindus, Buddhists, and Jains, existing in a rare and harmonious confluence. This section allows you to explore the distinct yet deeply interconnected spiritual landscapes that coexist here. Use the tabs to switch between the faiths and discover the key temples, sacred sites, and rituals that draw millions of devotees from across the across the globe.</p>
+                </div>
+
+                <div class="mt-10">
+                    <div class="flex justify-center border-b border-slate-300">
+                        <button id="hindu-tab-btn" class="tab-button active text-lg font-semibold py-3 px-6 -mb-px border-b-2 border-transparent">Hinduism</button>
+                        <button id="buddhist-tab-btn" class="tab-button text-lg font-semibold py-3 px-6 -mb-px border-b-2 border-transparent">Buddhism & Jainism</button>
+                    </div>
+
+                    <div id="hindu-content" class="mt-8">
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div class="bg-white p-6 rounded-lg shadow-lg">
+                                <h3 class="font-bold text-amber-700 text-lg">Vishnupad Temple</h3>
+                                <p class="mt-2 text-sm text-slate-600">The most prominent Hindu site, an 18th-century temple on the Phalgu River marking Lord Vishnu’s footprint (dharmashila). It houses a sacred 40-centimeter-long footprint of Lord Vishnu engraved in basalt. Built by Queen Ahilyabai of the Maratha dynasty in 1787, it is the epicenter for the *piṇḍadāna* ritual, a ceremony to offer homage to ancestors, believed to help souls escape hell and reach heaven.</p>
+                            </div>
+                             <div class="bg-white p-6 rounded-lg shadow-lg">
+                                <h3 class="font-bold text-amber-700 text-lg">Pind-Daana & Phalgu River</h3>
+                                <p class="mt-2 text-sm text-slate-600">The central ritual of Hindu pilgrimage in Gaya Ji. Devotees offer oblations to ancestors on the banks of the sacred Phalgu River, addressing "pitra rinna" (ancestral debt). Legend holds that Rama, Sita, and Lakshmana performed *piṇḍadāna* here for Dasharatha, as mentioned in the Ramayana and Mahabharata, reinforcing Gaya Ji's historical and mythological depth.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-lg">
+                                <h3 class="font-bold text-amber-700 text-lg">Ramshila Hill & Akshayavat</h3>
+                                <p class="mt-2 text-sm text-slate-600">Ramshila Hill is one of the sacred hills surrounding Gaya Ji, believed to be a site where Lord Rama performed ancestral rituals. Nearby is Akshayavat, an immortal banyan tree, where Pind-daan is also performed, ensuring eternal blessings. These are part of the 45 sacred places between Pretsil Hill in the north and Bodh Gaya in the south.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-lg">
+                                <h3 class="font-bold text-amber-700 text-lg">Mangla Gauri Temple & Sita Kund</h3>
+                                <p class="mt-2 text-sm text-slate-600">Mangla Gauri Temple is a hilltop Shakti Peetha dedicated to Goddess Sati (incarnation Mangla Gauri). This 15th-century shrine marks where Sati’s breast fell, making it one of the most important Hindu shrines in Gaya Ji. Sita Kund, a sacred pond opposite Vishnupad Temple, is associated with Sita, who is said to have performed rituals here for Dasharatha.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-lg">
+                                <h3 class="font-bold text-amber-700 text-lg">Pretshila Hill & Brahmayoni Hill</h3>
+                                <p class="mt-2 text-sm text-slate-600">Pretshila Hill is another significant site for ancestral rites, housing an Ahilya Bai Temple (1787) overlooking the Brahma Kund pond. Brahmayoni Hill is noted for Buddha preaching the Adittapariyaya Sutta, enhancing its Buddhist significance while being a Hindu sacred site. Other temples and the Phalgu river ghats are also visited for rituals. Rajendra Tower, an iconic clock tower built 1910–1914 and renamed after India’s first President in 1981, is also a notable landmark.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="buddhist-content" class="mt-8 hidden">
+                        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div class="bg-white p-6 rounded-lg shadow-lg">
+                                <h3 class="font-bold text-blue-700 text-lg">Mahabodhi Temple Complex</h3>
+                                <p class="mt-2 text-sm text-slate-600">A UNESCO World Heritage Site since June 26, 2002, located in Bodh Gaya (16 km away), marking the spot where Siddhartha Gautama attained enlightenment. Dating back to the 5th–6th centuries CE, with origins traced to Ashoka's 3rd-century BCE constructions, it is the earliest brick-built Buddhist shrine still standing and a centerpiece for Buddhist pilgrims.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-lg">
+                                <h3 class="font-bold text-blue-700 text-lg">The Bodhi Tree & Main Pilgrimage Sites</h3>
+                                <p class="mt-2 text-sm text-slate-600">A direct descendant of the original fig tree under which the Buddha meditated and achieved enlightenment. Bodh Gaya is one of the four main pilgrimage sites for Buddhists, alongside Lumbini, Sarnath, and Kushinagar, drawing millions of pilgrims annually for Vesak (Buddha Purnima) in April–May.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-lg">
+                                <h3 class="font-bold text-blue-700 text-lg">Dungeshwari Caves (Mahakala Caves) & Great Buddha Statue</h3>
+                                <p class="mt-2 text-sm text-slate-600">Located outside Bodh Gaya, these caves are where the Buddha practiced extreme asceticism for six years prior to his enlightenment. A shrine with an emaciated Buddha statue commemorates this period. The 19.5-meter (61-ft) Great Buddha Statue (1982–89), a serene seated Buddha, is also a popular pilgrimage stop.</p>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow-lg">
+                                <h3 class="font-bold text-blue-700 text-lg">Barabar Caves & Sujata Garh</h3>
+                                <p class="mt-2 text-sm text-slate-600">Located about 24 km north of Gaya Ji in Jehanabad district, these are India's oldest rock-cut caves (3rd century BCE). They feature Ashokan inscriptions and polished granite interiors, believed to be used by Ajivika ascetics, and famously inspired E.M. Forster's "A Passage to India." Sujata Garh marks the village of Sujata, who offered rice pudding to the starving Buddha, an act crucial to his path to enlightenment. International Buddhist monasteries also dot the town.</p>
+                            </div>
+                             <div class="bg-white p-6 rounded-lg shadow-lg">
+                                <h3 class="font-bold text-blue-700 text-lg">Sanctity in Jainism</h3>
+                                <p class="mt-2 text-sm text-slate-600">Gaya Ji also holds sanctity in Jainism, reflecting its multifaceted religious importance. While specific details of Jain sites are less prominently documented in common sources compared to Hindu and Buddhist sites, its spiritual landscape embraces all three ancient Indian religions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="culture" class="py-16 sm:py-24 bg-amber-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">A Rich Cultural Tapestry</h2>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">This section celebrates the vibrant local life of Gaya Ji, which is a beautiful amalgamation of spirituality, art, and culinary traditions. Explore the major festivals that mark its calendar, savor the diverse flavors of its Bihari and Tibetan-influenced cuisine, appreciate the unique local crafts, and understand the deep-rooted beliefs that shape daily life.</p>
+                </div>
+                
+                <div class="mt-16">
+                    <h3 class="text-2xl font-semibold text-center text-slate-800">Festivals & Celebrations</h3>
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="bg-white p-5 rounded-lg shadow text-center"><h4 class="font-bold">Pitru Paksha Mela</h4><p class="text-sm text-slate-500">A 16-day Hindu festival for ancestral worship, peaking in September–October, drawing millions of devotees annually to the Phalgu's banks for the *piṇḍadāna* ritual. It is a time for devotees to offer homage to ancestors, helping souls escape hell and reach heaven.</p></div>
+                        <div class="bg-white p-5 rounded-lg shadow text-center"><h4 class="font-bold">Vesak (Buddha Purnima)</h4><p class="text-sm text-slate-500">The most important Buddhist festival, celebrated in April–May, marking Buddha's birth, enlightenment, and passing, with grand ceremonies in Bodh Gaya. It attracts Buddhist followers from around the world.</p></div>
+                        <div class="bg-white p-5 rounded-lg shadow text-center"><h4 class="font-bold">Chhath Puja</h4><p class="text-sm text-slate-500">An ancient Hindu festival dedicated to the Sun God, celebrated with immense devotion, particularly in Bihar, marked by fasting and offerings to the setting and rising sun. This festival emphasizes purity and gratitude.</p></div>
+                        <div class="bg-white p-5 rounded-lg shadow text-center"><h4 class="font-bold">Other Festivals</h4><p class="text-sm text-slate-500">Major Hindu festivals like Holi and Diwali are widely celebrated in Gaya Ji. Local fairs and devotionals are common at the many temple sites throughout the year, reflecting the city's vibrant spiritual life. The Kagyu Monlam Chenmo is a major Tibetan Buddhist prayer festival.</p></div>
+                    </div>
+                </div>
+
+                <div class="mt-16">
+                    <h3 class="text-2xl font-semibold text-center text-slate-800">Culinary Heritage & Local Experience</h3>
+                     <div class="mt-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                        <div class="bg-white p-4 rounded-lg shadow text-center"><h4 class="font-bold">Litti Chokha</h4><p class="text-sm text-slate-500">Iconic Bihari dish of stuffed whole wheat dough balls, often served with mashed vegetables (chokha). A flavorful and nutritious staple.</p></div>
+                        <div class="bg-white p-4 rounded-lg shadow text-center"><h4 class="font-bold">Tilkut</h4><p class="text-sm text-slate-500">A local sweet made of pounded sesame seeds and jaggery, a specialty of Gaya Ji, especially popular during Makar Sankranti. It's known for its unique texture and taste.</p></div>
+                        <div class="bg-white p-4 rounded-lg shadow text-center"><h4 class="font-bold">Momos</h4><p class="text-sm text-slate-500">Tibetan-style dumplings, widely popular due to the pilgrimage influx from various Buddhist countries, reflecting the vibrant cultural exchange in the region.</p></div>
+                        <div class="bg-white p-4 rounded-lg shadow text-center"><h4 class="font-bold">Khaja</h4><p class="text-sm text-slate-500">A crispy, layered pastry, another beloved local sweet often consumed during festivals. Its delicate texture and sweetness make it a popular treat.</p></div>
+                        <div class="bg-white p-4 rounded-lg shadow text-center"><h4 class="font-bold">Sattu Paratha</h4><p class="text-sm text-slate-500">Flatbread stuffed with roasted gram flour, a nutritious and widely consumed staple, particularly in Bihar, known for its energy-boosting properties.</p></div>
+                    </div>
+                    <div class="mt-8 text-center bg-white p-6 rounded-lg shadow-lg">
+                        <h4 class="font-bold text-amber-700">Explore Vibrant Bazaars</h4>
+                        <p class="mt-2 text-slate-600">Beyond the sacred sites, explore Gaya Ji's vibrant bazaars for unique handicrafts, traditional textiles, incense sticks, and local souvenirs, offering a glimpse into the city's artistic traditions and a chance to interact with local life. You can also hire pandits for guidance in rituals.</p>
+                    </div>
+                </div>
+
+                <div class="mt-16 text-center">
+                    <h3 class="text-2xl font-semibold text-slate-800">Unique Beliefs & Harmony</h3>
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h4 class="font-bold text-amber-700">The Enigmatic Phalgu River</h4>
+                            <p class="mt-2 text-sm text-slate-600">A unique belief holds that the Phalgu River runs mostly underground due to a curse from Sita; its water only surfaces when dug. This mystical element adds to the river's profound sanctity for ancestral rituals.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h4 class="font-bold text-amber-700">Multifaith Harmony & Demographics</h4>
+                            <p class="mt-2 text-sm text-slate-600">Gaya Ji exemplifies religious coexistence, hosting major Buddhist festivals, ancient Hindu rituals, and significant Islamic events at the historic Jama Masjid, showcasing a true blend of faiths. It also holds sanctity in Jainism. According to the 2011 census, the religious composition is approximately 79.43% Hinduism, 19.65% Islam, 0.26% Christianity, 0.24% Jainism, and 1.42% others, including 0.09% Sikhs and 0.02% Buddhists. The city is also home to Gayawal Brahmins, the traditional priests of the Vishnupad Temple. Scheduled Castes make up about 30.4% of the district population.</p>
+                        </div>
+                    </div>
+                    <div class="mt-16 text-center bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="font-bold text-amber-700">Best Time to Visit & Tourist Activities</h3>
+                        <p class="mt-2 text-slate-600">The most favorable time to visit Gaya Ji is between November and February, offering pleasant winter weather suitable for exploration and key festive rituals. Post-monsoon (late September) and winter months draw large crowds (Buddhist monks often arrive by December). Summers (April–June) are very hot (often >40 °C) and humid, with monsoon rains from June–September (Phalgu river may flood in heavy rains). Plan ahead for festival seasons. Modest dress is required at temples, and plenty of hotels and guesthouses cater to pilgrims (e.g. the Maha Bodhi Resort and Sambodhi Retreat in Bodh Gaya). Tourist activities include visiting Gaya Pind Daan, Barabar Caves, Vishnupad Temple, and the Falgu River, with options to explore sites like Ramshila Hill known for its spiritual energy.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="development" class="py-16 sm:py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Development & The Future</h2>
+                    <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">While rooted in ancient history, Gaya Ji is also an evolving urban center focused on modern development. This section explores the city's socio-economic landscape, its governance, and its robust infrastructure. Discover the key economic drivers, educational advancements, and government initiatives aimed at fostering inclusive growth, diversifying the economy, and leveraging Gaya Ji's spiritual assets for regional upliftment.</p>
+                </div>
+
+                <div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div class="bg-white p-6 rounded-lg shadow-lg">
+                        <h3 class="text-xl font-semibold text-center mb-4">Economic Drivers (District)</h3>
+                        <div class="chart-container">
+                            <canvas id="economyChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                         <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h4 class="font-bold text-amber-700">Administration & Governance</h4>
+                            <p class="mt-2 text-sm text-slate-600">Gaya Ji serves as the administrative headquarters of **Gaya District** and the **Magadh Division**, with its governance handled by the Gaya Nagar Nigam, currently led by Mayor Ganesh Paswan and Deputy Mayor Mohan Shrivastava. The district itself spans 4,976 square kilometers and was established on October 3, 1865. This structure manages local development activities, including sand auctions and transportation permits.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h4 class="font-bold text-amber-700">Robust Transport Network</h4>
+                            <p class="mt-2 text-sm text-slate-600">Gaya Ji is well-connected by air, rail, and road. **Gaya International Airport** (8 km from the city center) has seasonal international flights primarily for Buddhist pilgrims (e.g. to Sri Lanka, Thailand, Bhutan) and regular domestic flights to Kolkata and Delhi (IndiGo operates daily services). Plans exist to expand it as a secondary airport for Kolkata. **Gaya Junction** railway station (4 km from city center, elevation 117m, coord: 24°48′13″N 84°59′57″E) is a major node on the New Delhi–Howrah Grand Chord route, with modern amenities. It falls under the East Central Railway’s Pandit Deen Dayal Upadhyaya division. Road connectivity includes **National Highways NH-19** (old Grand Trunk Road), **NH-82**, and **NH-83**, linking it to Patna (116 km south), Kolkata, Ranchi, etc. The Bihar State Road Transport Corporation (BSRTC) runs regular buses. Local transport includes city buses, auto-rickshaws, cycle/electric rickshaws, and horse-drawn tangas, with modest fares and bargaining common. For pilgrims, many hotels and dharmashalas offer shuttle or arrangement services.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h4 class="font-bold text-amber-700">Key Economic Activities</h4>
+                            <p class="mt-2 text-sm text-slate-600">Gaya Ji is Bihar’s second-largest economic contributor after Patna. Agriculture dominates the district economy (rice, wheat, maize, lentils, potatoes), supported by irrigation. Livestock (cattle, buffalo, goats, pigs) is also significant. In the city, numerous small-scale and household industries flourish, producing **agarbatti** (incense sticks), traditional sweets like **tilkut** and **lai**, handloom and power-loom textiles, and stone carving. Other local industries include metal fabrication, machinery repair, and plastic goods manufacturing. Gaya Ji’s Kedarnath Market is the main wholesale vegetable market. Religious tourism (pilgrim lodging, shops, transport) is a major service sector; Bodh Gaya alone has hundreds of temples and dozens of guesthouses, including large resorts for international visitors.</p>
+                        </div>
+                         <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h4 class="font-bold text-amber-700">Educational Hub & Initiatives</h4>
+                            <p class="mt-2 text-sm text-slate-600">Gaya Ji is an educational center, home to notable institutions such as the **Central University of South Bihar** (est. 2010, NAAC ‘A++’ grade); **Magadh University** (state university); the **Indian Institute of Management Bodh Gaya** (est. 2015); **Anugrah Narayan Magadh Medical College & Hospital**; **Officer’s Training Academy, Gaya**; **Institute of Hotel Management, Bodh Gaya**; and **Gaya College** (founded 1944, affiliated to Magadh University, offering a wide range of programs and recently celebrated its Foundation Day in 2025). It also has a government engineering college (Gaya College of Engineering), several polytechnics, and numerous private colleges (e.g. Mirza Ghalib College) and Kendriya Vidyalayas. The city’s literacy rate (age 7+) is high (~85.7% as of 2011), well above the district average (~63.7%), reflecting widespread school and college enrollment.</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-lg">
+                            <h4 class="font-bold text-amber-700">Modern Developments & Environmental Outlook</h4>
+                            <p class="mt-2 text-sm text-slate-600">In May 2025, the city was officially renamed “Gaya Ji” to honor its deep spiritual heritage. Recent infrastructure initiatives—including a **1,670-acre manufacturing cluster** and inclusion in the **Amritsar-Delhi-Kolkata Industrial Corridor**—aim to boost both pilgrimage tourism and industrial growth. Gaya Ji experiences a humid subtropical climate (Köppen Classification: Cwa), notorious for hot summers (daytime highs often exceed 40 °C, May average ~42 °C), followed by a monsoon (June–September) with heavy rains (Phalgu river may flood). The coolest period is winter (December–February), when nights can drop to ~10 °C (Jan lows ~11 °C) and days reach ~22–25 °C. Spring (March–April) is warm (~31–37 °C). However, it has been recognized for environmental efforts, ranking 8th among “National Clean Air Cities” in the 3-10 lakh population category in the Swachh Vayu Sarvekshan 2024, reflecting recent strides in air quality management. This demonstrates a commitment to sustainable development alongside its heritage.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-slate-800 text-white">
+        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 text-center text-sm">
+            <p>Interactive Application by Gemini. Data sourced from authoritative sources including The Hindu, Britannica, Wikipedia, UNESCO, MakeMyTrip, Gaya College, Gaya District official websites, Swachh Vayu Sarvekshan 2024 results, and Times of India.</p>
+            <p class="mt-1 text-slate-400">Created for informational and educational purposes.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: '#334155',
+                            font: {
+                                family: "'Inter', sans-serif"
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        grid: {
+                            color: '#e2e8f0'
+                        },
+                        ticks: {
+                            color: '#475569'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            color: '#475569'
+                        }
+                    }
+                }
+            };
+            
+            const doughnutChartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                         labels: {
+                            color: '#334155',
+                            font: {
+                                family: "'Inter', sans-serif"
+                            }
+                        }
+                    }
+                },
+                cutout: '60%'
+            };
+
+            const populationData = {
+                labels: ['2001', '2011', '2023', '2024', '2025'],
+                datasets: [{
+                    label: 'Gaya Ji City Population (Approx.)',
+                    data: [385432, 470839, 645000, 664000, 683000],
+                    borderColor: '#D97706',
+                    backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                    fill: true,
+                    tension: 0.3
+                }]
+            };
+            new Chart(document.getElementById('populationChart'), {
+                type: 'line',
+                data: populationData,
+                options: chartOptions
+            });
+
+            const religionData = {
+                labels: ['Hindu (79.43%)', 'Muslim (19.65%)', 'Christian (0.26%)', 'Jain (0.24%)', 'Sikh (0.09%)', 'Buddhist (0.02%)', 'Other (0.31%)'],
+                datasets: [{
+                    label: 'Religious Composition',
+                    data: [79.43, 19.65, 0.26, 0.24, 0.09, 0.02, 0.31],
+                    backgroundColor: ['#F59E0B', '#10B981', '#3B82F6', '#EF4444', '#8B5CF6', '#F97316', '#64748B'],
+                    borderColor: '#FFFAF0',
+                    borderWidth: 3
+                }]
+            };
+             new Chart(document.getElementById('religionChart'), {
+                type: 'doughnut',
+                data: religionData,
+                options: doughnutChartOptions
+            });
+
+            const economyData = {
+                labels: ['Agriculture & Allied', 'Household Industry', 'Religious Tourism', 'Mica Mining'],
+                datasets: [{
+                    label: 'Economic Drivers',
+                    data: [65, 15, 15, 5],
+                    backgroundColor: ['#22C55E', '#3B82F6', '#F97316', '#64748B'],
+                    borderColor: '#FFFAF0',
+                    borderWidth: 3,
+                    hoverOffset: 4
+                }]
+            };
+            new Chart(document.getElementById('economyChart'), {
+                type: 'doughnut',
+                data: economyData,
+                options: doughnutChartOptions
+            });
+
+            const hinduTabBtn = document.getElementById('hindu-tab-btn');
+            const buddhistTabBtn = document.getElementById('buddhist-tab-btn');
+            const hinduContent = document.getElementById('hindu-content');
+            const buddhistContent = document.getElementById('buddhist-content');
+
+            hinduTabBtn.addEventListener('click', () => {
+                hinduTabBtn.classList.add('active');
+                buddhistTabBtn.classList.remove('active');
+                hinduContent.classList.remove('hidden');
+                buddhistContent.classList.add('hidden');
+            });
+
+            buddhistTabBtn.addEventListener('click', () => {
+                buddhistTabBtn.classList.add('active');
+                hinduTabBtn.classList.remove('active');
+                buddhistContent.classList.remove('hidden');
+                hinduContent.classList.add('hidden');
+            });
+            
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.4
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting){
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if(link.getAttribute('href').substring(1) === entry.target.id){
+                                link.classList.add('active');
+                            }
+                        })
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+
+</body>
+</html>
